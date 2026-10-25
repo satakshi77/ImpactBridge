@@ -195,3 +195,11 @@ Open `http://localhost:3000` in your web browser.
 5. **Donor Opens Signature Impact Tracker**
    - Return to **Donor (Alex)** → Supported Projects → Open live Impact Tracker.
    - Inspect the updated funds progress, completed milestones, and itemized category expenditure chart.
+
+     ---
+
+## 🌐 Live Demo
+
+**Try ImpactBridge here:** [Launch Live Website](https://impact-bridge-t7ah.vercel.app/)
+
+Explore the platform's NGO fundraising, volunteer matching, and project impact tracking features through the live application.
