@@ -1,0 +1,17 @@
+{
+  "name": "impactbridge",
+  "version": "1.0.0",
+  "description": "ImpactBridge - NGO Transparency, Volunteering, and Real-time Impact Platform",
+  "scripts": {
+    "dev": "concurrently -n \"SERVER,CLIENT\" -c \"blue,green\" \"npm --prefix server run dev\" \"npm --prefix client run dev\"",
+    "dev:server": "npm --prefix server run dev",
+    "dev:client": "npm --prefix client run dev",
+    "seed": "npm --prefix server run seed",
+    "build": "npm --prefix client run build",
+    "start": "node server/src/server.js",
+    "install:all": "npm install && npm --prefix server install && npm --prefix client install"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

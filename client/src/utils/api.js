@@ -1,4 +1,13 @@
-const API_BASE = '/api';
+let apiBase = import.meta.env.VITE_API_URL;
+if (apiBase) {
+  if (!apiBase.startsWith('http://') && !apiBase.startsWith('https://')) {
+    apiBase = `https://${apiBase}`;
+  }
+  apiBase = `${apiBase.replace(/\/+$/, '')}/api`;
+} else {
+  apiBase = '/api';
+}
+const API_BASE = apiBase;
 
 export const apiFetch = async (endpoint, options = {}) => {
   const token = localStorage.getItem('ib_token');

@@ -3,6 +3,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
 const path = require('path');
+const fs = require('fs');
 const connectDB = require('./config/db');
 
 // Load environment variables
@@ -40,7 +41,19 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// 404 Handler
+// Serve static client assets in production if built
+const clientDistPath = path.join(__dirname, '../../client/dist');
+if (fs.existsSync(clientDistPath)) {
+  app.use(express.static(clientDistPath));
+  app.use((req, res, next) => {
+    if (req.method === 'GET' && !req.path.startsWith('/api')) {
+      return res.sendFile(path.join(clientDistPath, 'index.html'));
+    }
+    next();
+  });
+}
+
+// 404 Handler for API
 app.use((req, res) => {
   res.status(404).json({ success: false, message: `API endpoint ${req.originalUrl} not found` });
 });

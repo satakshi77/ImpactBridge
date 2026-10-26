@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Heart, Users, ShieldCheck, Mail, Lock, User, Building, FileText } from 'lucide-react';
 
 export const RegisterPage = () => {
   const { register } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
-  const [role, setRole] = useState('donor'); // 'donor', 'volunteer', 'ngo'
+  const urlRole = searchParams.get('role');
+  const [role, setRole] = useState(
+    ['donor', 'volunteer', 'ngo'].includes(urlRole) ? urlRole : 'donor'
+  );
   const [formData, setFormData] = useState({
     name: '',
     email: '',

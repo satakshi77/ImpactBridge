@@ -19,14 +19,15 @@ import { NgoDashboard } from './pages/NgoDashboard';
 import { AdminDashboard } from './pages/AdminDashboard';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
+import { UnauthorizedPage } from './pages/UnauthorizedPage';
 
-// Protected Route Wrapper
+// Protected Route Wrapper with Strict Role Access Isolation
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const { user, loading } = useAuth();
   if (loading) return null;
   if (!user) return <Navigate to="/login" replace />;
   if (allowedRoles && !allowedRoles.includes(user.role)) {
-    return <Navigate to="/" replace />;
+    return <UnauthorizedPage requiredRole={allowedRoles[0]} />;
   }
   return children;
 };
@@ -48,14 +49,18 @@ export default function App() {
               <Route path="/map" element={<ImpactMapPage />} />
               <Route path="/ngos" element={<NgosPage />} />
               <Route path="/ngos/:id" element={<NgoDetailPage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
 
-              {/* Role Dashboards */}
+              {/* Dedicated Role Login Routes */}
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/login/:rolePortal" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/unauthorized" element={<UnauthorizedPage />} />
+
+              {/* Role Dashboards - Strict Access Isolation */}
               <Route
                 path="/donor/dashboard"
                 element={
-                  <ProtectedRoute allowedRoles={['donor', 'volunteer', 'ngo', 'admin']}>
+                  <ProtectedRoute allowedRoles={['donor']}>
                     <DonorDashboard />
                   </ProtectedRoute>
                 }
@@ -63,7 +68,7 @@ export default function App() {
               <Route
                 path="/volunteer/dashboard"
                 element={
-                  <ProtectedRoute allowedRoles={['volunteer', 'donor', 'ngo', 'admin']}>
+                  <ProtectedRoute allowedRoles={['volunteer']}>
                     <VolunteerDashboard />
                   </ProtectedRoute>
                 }
@@ -71,7 +76,7 @@ export default function App() {
               <Route
                 path="/ngo/dashboard"
                 element={
-                  <ProtectedRoute allowedRoles={['ngo', 'admin']}>
+                  <ProtectedRoute allowedRoles={['ngo']}>
                     <NgoDashboard />
                   </ProtectedRoute>
                 }
