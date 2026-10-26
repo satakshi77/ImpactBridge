@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { apiFetch } from '../utils/api';
-import { ShieldCheck, MapPin, ExternalLink, Award, ArrowRight } from 'lucide-react';
+import { ImpactBridgeLayout } from '../components/layout/ImpactBridgeLayout';
+import { ShieldCheck, MapPin, ExternalLink, Award, ArrowRight, Building2 } from 'lucide-react';
 
 export const NgosPage = () => {
   const [ngos, setNgos] = useState([]);
@@ -24,83 +25,69 @@ export const NgosPage = () => {
   }, []);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
-      <div className="border-b border-slate-200 pb-8">
-        <span className="text-xs font-bold text-emerald-600 uppercase tracking-wider block mb-1">
+    <ImpactBridgeLayout title="Verified NGOs">
+      <div className="bg-white rounded-3xl p-6 sm:p-7 shadow-[0_4px_25px_-4px_rgba(0,0,0,0.05)] border border-slate-100/80">
+        <h2 className="text-base font-bold text-slate-900 font-heading">
           Accredited Non-Profit Directory
-        </span>
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 font-heading">
-          Verified Organizations
-        </h1>
-        <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-xl">
-          All organizations submit government trust registrations, 80G tax certificates, and verified bank
-          mandates before launching public fundraising campaigns.
+        </h2>
+        <p className="text-xs text-slate-500 mt-0.5">
+          All organizations submit government trust registrations, 80G tax certificates, and verified bank mandates.
         </p>
       </div>
 
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3].map((n) => (
-            <div key={n} className="bg-white rounded-3xl p-6 h-80 border border-slate-200 animate-pulse" />
+            <div key={n} className="bg-white rounded-3xl p-6 h-80 border border-slate-100 shadow-[0_4px_25px_-4px_rgba(0,0,0,0.05)] animate-pulse" />
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {ngos.map((org) => (
             <Link
               key={org._id}
               to={`/ngos/${org._id}`}
-              className="bg-white rounded-3xl border border-slate-200 shadow-xs hover:shadow-xl transition-all duration-300 p-6 flex flex-col justify-between group"
+              className="bg-white rounded-3xl border border-slate-100/80 shadow-[0_4px_25px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.08)] transition-all p-6 flex flex-col justify-between group"
             >
               <div>
                 <div className="flex items-start justify-between gap-4 mb-4">
                   <img
                     src={org.logo}
                     alt={org.name}
-                    className="w-16 h-16 rounded-2xl object-cover border border-slate-200 shadow-xs group-hover:scale-105 transition"
+                    className="w-16 h-16 rounded-2xl object-cover border border-slate-100 shadow-xs group-hover:scale-105 transition"
                   />
-                  <span
-                    className={`inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full ${
-                      org.verificationStatus === 'verified'
-                        ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
-                        : 'bg-amber-100 text-amber-800 border border-amber-200'
-                    }`}
-                  >
-                    <ShieldCheck className="w-3.5 h-3.5" />
-                    <span className="capitalize">{org.verificationStatus}</span>
+                  <span className="bg-emerald-50 text-emerald-700 text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1 border border-emerald-200">
+                    <ShieldCheck className="w-3.5 h-3.5" /> 80G Verified
                   </span>
                 </div>
 
-                <h3 className="text-lg font-bold text-slate-900 group-hover:text-emerald-700 transition font-heading">
+                <h3 className="text-base font-bold text-slate-900 font-heading group-hover:text-blue-600 transition-colors">
                   {org.name}
                 </h3>
-                <p className="text-xs font-medium text-emerald-600 mt-0.5">{org.tagline}</p>
                 <p className="text-xs text-slate-500 mt-2 line-clamp-3 leading-relaxed">
-                  {org.description}
+                  {org.mission}
                 </p>
 
-                <div className="flex flex-wrap gap-1.5 mt-4">
-                  {(org.causeAreas || []).map((cause, i) => (
-                    <span key={i} className="text-[10px] font-semibold bg-slate-100 text-slate-600 px-2.5 py-0.5 rounded-md">
+                <div className="mt-4 flex flex-wrap gap-1.5">
+                  {(org.causesHandled || []).map((cause, i) => (
+                    <span
+                      key={i}
+                      className="bg-slate-100 text-slate-700 text-[10px] font-semibold px-2 py-0.5 rounded-md"
+                    >
                       {cause}
                     </span>
                   ))}
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-slate-100 mt-6 flex items-center justify-between text-xs text-slate-500">
-                <span className="flex items-center gap-1">
-                  <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                  {org.address?.city || 'Delhi'}
-                </span>
-                <span className="font-bold text-slate-800">
-                  ₹{Number(org.totalRaised || 0).toLocaleString('en-IN')} Raised
-                </span>
+              <div className="pt-4 border-t border-slate-100 mt-6 flex items-center justify-between text-xs font-bold text-[#2563eb]">
+                <span>View Organization Profile</span>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </div>
             </Link>
           ))}
         </div>
       )}
-    </div>
+    </ImpactBridgeLayout>
   );
 };

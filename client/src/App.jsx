@@ -19,6 +19,8 @@ import { AdminDashboard } from './pages/AdminDashboard';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { UnauthorizedPage } from './pages/UnauthorizedPage';
+import { ProfilePage } from './pages/ProfilePage';
+import { ImpactUpdatesPage } from './pages/ImpactUpdatesPage';
 
 // Root Entry: Site opens directly to Login if not authenticated
 const RootRedirect = () => {
@@ -42,15 +44,16 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   return children;
 };
 
-// App Layout with conditional Navbar/Footer (Hidden on Login & Register)
+// App Layout with unified modern experience
 const AppLayout = () => {
   const location = useLocation();
-  // Hide Navbar & Footer completely on authentication pages
-  const isAuthPage = location.pathname.startsWith('/login') || location.pathname === '/register';
+
+  // Show legacy marketing navbar/footer only if explicitly on /landing
+  const isLandingOnly = location.pathname === '/landing';
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-emerald-500 selection:text-white">
-      {!isAuthPage && <Navbar />}
+    <div className="min-h-screen flex flex-col bg-[#f3f6fa] text-slate-800 selection:bg-blue-500 selection:text-white">
+      {isLandingOnly && <Navbar />}
       <main className="flex-1">
         <Routes>
           {/* Site opens directly to Login or Role Dashboard */}
@@ -62,16 +65,11 @@ const AppLayout = () => {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/unauthorized" element={<UnauthorizedPage />} />
 
-          {/* Public & Explore Pages */}
-          <Route path="/landing" element={<LandingPage />} />
-          <Route path="/campaigns" element={<CampaignsPage />} />
-          <Route path="/campaigns/:id" element={<CampaignDetailPage />} />
-          <Route path="/volunteers" element={<VolunteerPage />} />
-          <Route path="/map" element={<ImpactMapPage />} />
-          <Route path="/ngos" element={<NgosPage />} />
-          <Route path="/ngos/:id" element={<NgoDetailPage />} />
-
-          {/* User Dashboards (Donor & Volunteer) */}
+          {/* User Dashboards (Donor, Volunteer, NGO, Admin) */}
+          <Route
+            path="/dashboard"
+            element={<RootRedirect />}
+          />
           <Route
             path="/donor/dashboard"
             element={
@@ -96,8 +94,6 @@ const AppLayout = () => {
               </ProtectedRoute>
             }
           />
-
-          {/* Admin Dashboard: Strictly for Administrator */}
           <Route
             path="/admin/dashboard"
             element={
@@ -107,11 +103,46 @@ const AppLayout = () => {
             }
           />
 
+          {/* Profile & Updates */}
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/updates"
+            element={
+              <ProtectedRoute>
+                <ImpactUpdatesPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/notifications"
+            element={
+              <ProtectedRoute>
+                <ImpactUpdatesPage />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Public & Explore Pages */}
+          <Route path="/landing" element={<LandingPage />} />
+          <Route path="/campaigns" element={<CampaignsPage />} />
+          <Route path="/campaigns/:id" element={<CampaignDetailPage />} />
+          <Route path="/volunteers" element={<VolunteerPage />} />
+          <Route path="/map" element={<ImpactMapPage />} />
+          <Route path="/ngos" element={<NgosPage />} />
+          <Route path="/ngos/:id" element={<NgoDetailPage />} />
+
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
-      {!isAuthPage && <Footer />}
+      {isLandingOnly && <Footer />}
     </div>
   );
 };

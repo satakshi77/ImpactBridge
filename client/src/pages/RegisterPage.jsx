@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Heart, Users, ShieldCheck, Mail, Lock, User, Building, FileText } from 'lucide-react';
+import { Heart, Users, Building2, Mail, Lock, User, AlertCircle, ArrowRight, ShieldCheck } from 'lucide-react';
 
 export const RegisterPage = () => {
   const { register } = useAuth();
@@ -59,160 +59,207 @@ export const RegisterPage = () => {
   };
 
   return (
-    <div className="max-w-xl mx-auto px-4 py-16 space-y-8">
-      <div className="text-center space-y-2">
-        <h1 className="text-3xl font-extrabold text-slate-900 font-heading">Join ImpactBridge</h1>
-        <p className="text-xs text-slate-500">Give with purpose. Volunteer with impact. See the change.</p>
-      </div>
-
-      <div className="bg-white rounded-3xl p-8 border border-slate-200 shadow-xl space-y-6">
-        {/* Role Selector Tabs */}
-        <div>
-          <label className="font-semibold text-slate-700 text-xs block mb-2 uppercase tracking-wider">
-            I am joining as a:
-          </label>
-          <div className="grid grid-cols-3 gap-2">
-            {[
-              { id: 'donor', label: 'Donor / Supporter', icon: Heart },
-              { id: 'volunteer', label: 'Volunteer', icon: Users },
-              { id: 'ngo', label: 'NGO / Non-Profit', icon: ShieldCheck },
-            ].map((item) => {
-              const Icon = item.icon;
-              return (
-                <button
-                  type="button"
-                  key={item.id}
-                  onClick={() => setRole(item.id)}
-                  className={`py-3 px-2 rounded-2xl border text-center transition flex flex-col items-center gap-1.5 cursor-pointer ${
-                    role === item.id
-                      ? 'border-emerald-600 bg-emerald-50 text-emerald-800 font-bold shadow-xs'
-                      : 'border-slate-200 hover:bg-slate-50 text-slate-600'
-                  }`}
-                >
-                  <Icon className="w-4 h-4 text-emerald-600" />
-                  <span className="text-[11px]">{item.label}</span>
-                </button>
-              );
-            })}
+    <div className="min-h-screen bg-[#f3f6fa] flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 font-sans antialiased text-slate-800">
+      <div className="max-w-md w-full mx-auto space-y-6">
+        {/* Brand Header */}
+        <div className="text-center space-y-3">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white shadow-lg border border-slate-100 p-3">
+            <svg className="w-10 h-10 text-[#2563eb]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <circle cx="12" cy="12" r="10" />
+              <circle cx="12" cy="12" r="6" />
+              <circle cx="12" cy="12" r="2" />
+            </svg>
+          </div>
+          <div>
+            <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight font-heading">
+              Join ImpactBridge
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-500 mt-1 font-medium">
+              Create an account to start contributing, volunteering, or launching verified campaigns
+            </p>
           </div>
         </div>
 
-        {error && (
-          <div className="p-3 bg-rose-50 text-rose-700 rounded-xl text-xs border border-rose-200">
-            {error}
-          </div>
-        )}
+        {/* Role Selection Tabs */}
+        <div className="grid grid-cols-3 gap-2 p-1.5 bg-slate-200/70 rounded-2xl">
+          <button
+            type="button"
+            onClick={() => setRole('donor')}
+            className={`py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
+              role === 'donor'
+                ? 'bg-[#2563eb] text-white shadow-sm'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <Heart className="w-3.5 h-3.5" />
+            <span>Donor</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setRole('volunteer')}
+            className={`py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
+              role === 'volunteer'
+                ? 'bg-purple-600 text-white shadow-sm'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <Users className="w-3.5 h-3.5" />
+            <span>Volunteer</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setRole('ngo')}
+            className={`py-2 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer ${
+              role === 'ngo'
+                ? 'bg-emerald-600 text-white shadow-sm'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <Building2 className="w-3.5 h-3.5" />
+            <span>NGO Org</span>
+          </button>
+        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4 text-xs">
-          <div>
-            <label className="font-semibold text-slate-700 block mb-1">
-              {role === 'ngo' ? 'Representative Full Name' : 'Full Name'}
-            </label>
-            <input
-              type="text"
-              required
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              placeholder="e.g. Maya Sharma"
-              className="w-full px-3 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none"
-            />
+        {/* Form Card */}
+        <div className="bg-white rounded-3xl border border-slate-100 shadow-[0_4px_30px_-4px_rgba(0,0,0,0.06)] p-6 sm:p-8 space-y-6">
+          <div className="border-b border-slate-100 pb-3">
+            <h2 className="text-lg font-bold text-slate-900 font-heading capitalize">
+              Register as {role === 'ngo' ? 'an NGO Organization' : role}
+            </h2>
+            <p className="text-xs text-slate-400 mt-0.5">
+              Fill out the details below to complete your registration.
+            </p>
           </div>
 
-          <div>
-            <label className="font-semibold text-slate-700 block mb-1">Email Address</label>
-            <input
-              type="email"
-              required
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              placeholder="name@example.com"
-              className="w-full px-3 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none"
-            />
-          </div>
-
-          <div>
-            <label className="font-semibold text-slate-700 block mb-1">Password</label>
-            <input
-              type="password"
-              required
-              minLength={6}
-              value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              placeholder="At least 6 characters"
-              className="w-full px-3 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none"
-            />
-          </div>
-
-          {/* Role specific inputs */}
-          {role === 'ngo' && (
-            <div className="space-y-3 pt-2 border-t border-slate-100">
-              <div>
-                <label className="font-semibold text-slate-700 block mb-1">Organization Legal Name</label>
-                <input
-                  type="text"
-                  required
-                  value={formData.organizationName}
-                  onChange={(e) => setFormData({ ...formData, organizationName: e.target.value })}
-                  placeholder="e.g. Pratham Vikas Trust"
-                  className="w-full px-3 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500"
-                />
-              </div>
-              <div>
-                <label className="font-semibold text-slate-700 block mb-1">Registration / 80G Number</label>
-                <input
-                  type="text"
-                  required
-                  value={formData.registrationNumber}
-                  onChange={(e) => setFormData({ ...formData, registrationNumber: e.target.value })}
-                  placeholder="e.g. NGO-DEL-2022-9901"
-                  className="w-full px-3 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500"
-                />
-              </div>
+          {error && (
+            <div className="p-3.5 bg-rose-50 text-rose-700 rounded-2xl text-xs border border-rose-200 flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 shrink-0 text-rose-600" />
+              <span>{error}</span>
             </div>
           )}
 
-          {role === 'volunteer' && (
-            <div className="space-y-3 pt-2 border-t border-slate-100">
-              <div>
-                <label className="font-semibold text-slate-700 block mb-1">Your Skills (Comma Separated)</label>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                Full Name
+              </label>
+              <div className="relative">
+                <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
+                  required
+                  placeholder="e.g. Alex Morgan"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                Email Address
+              </label>
+              <div className="relative">
+                <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <input
+                  type="email"
+                  required
+                  placeholder="alex.donor@example.com"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                Password
+              </label>
+              <div className="relative">
+                <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <input
+                  type="password"
+                  required
+                  placeholder="••••••••"
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium"
+                />
+              </div>
+            </div>
+
+            {role === 'ngo' && (
+              <>
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    Organization Official Name
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. GreenEarth Foundation"
+                    value={formData.organizationName}
+                    onChange={(e) => setFormData({ ...formData, organizationName: e.target.value })}
+                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                    Trust Registration / FCRA Number
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. NGO-DEL-2018-9941"
+                    value={formData.registrationNumber}
+                    onChange={(e) => setFormData({ ...formData, registrationNumber: e.target.value })}
+                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium font-mono"
+                  />
+                </div>
+              </>
+            )}
+
+            {role === 'volunteer' && (
+              <div>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                  Core Skills (Comma separated)
+                </label>
+                <input
+                  type="text"
+                  placeholder="e.g. Teaching, First Aid, Social Media"
                   value={formData.skills}
                   onChange={(e) => setFormData({ ...formData, skills: e.target.value })}
-                  placeholder="Teaching, Digital Literacy, Graphic Design"
-                  className="w-full px-3 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500"
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-xs sm:text-sm bg-slate-50/50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium"
                 />
               </div>
-              <div>
-                <label className="font-semibold text-slate-700 block mb-1">Weekly Availability</label>
-                <select
-                  value={formData.availability}
-                  onChange={(e) => setFormData({ ...formData, availability: e.target.value })}
-                  className="w-full px-3 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500"
-                >
-                  <option>Weekends</option>
-                  <option>Weekdays</option>
-                  <option>Flexible</option>
-                  <option>Evenings</option>
-                </select>
-              </div>
-            </div>
-          )}
+            )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs transition cursor-pointer flex items-center justify-center gap-1.5"
-          >
-            {loading ? 'Creating Account...' : 'Complete Registration'}
-          </button>
-        </form>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-[#2563eb] hover:bg-blue-700 text-white font-bold py-3.5 px-6 rounded-2xl transition shadow-md shadow-blue-500/20 cursor-pointer flex items-center justify-center gap-2 active:scale-98 disabled:opacity-50 text-sm mt-4"
+            >
+              {loading ? (
+                <span>Creating Account...</span>
+              ) : (
+                <>
+                  <span>Complete Registration</span>
+                  <ArrowRight className="w-4 h-4" />
+                </>
+              )}
+            </button>
+          </form>
 
-        <div className="text-center text-xs text-slate-500 pt-2 border-t border-slate-100">
-          Already registered?{' '}
-          <Link to="/login" className="font-bold text-emerald-600 hover:underline">
-            Log in here
-          </Link>
+          <div className="text-center pt-2 border-t border-slate-100">
+            <p className="text-xs text-slate-400">
+              Already have an account?{' '}
+              <Link to="/login" className="text-blue-600 font-bold hover:underline">
+                Sign in here
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>

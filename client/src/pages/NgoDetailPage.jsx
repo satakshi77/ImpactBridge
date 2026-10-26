@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { ImpactBridgeLayout } from '../components/layout/ImpactBridgeLayout';
 import { apiFetch } from '../utils/api';
 import { ShieldCheck, MapPin, Mail, Phone, FileText, Heart, Users, ArrowLeft } from 'lucide-react';
 
@@ -48,7 +49,7 @@ export const NgoDetailPage = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+    <ImpactBridgeLayout title="Organization Profile">
       <div>
         <Link to="/ngos" className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-800 transition">
           <ArrowLeft className="w-3.5 h-3.5" />
@@ -150,6 +151,6 @@ export const NgoDetailPage = () => {
           ))}
         </div>
       </div>
-    </div>
+    </ImpactBridgeLayout>
   );
 };
