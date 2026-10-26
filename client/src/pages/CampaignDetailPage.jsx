@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { ImpactBridgeLayout } from '../components/layout/ImpactBridgeLayout';
 import { apiFetch } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 import { ImpactTracker } from '../components/impact/ImpactTracker';
@@ -101,7 +102,7 @@ export const CampaignDetailPage = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+    <ImpactBridgeLayout title="Campaign Overview">
       {/* Back button */}
       <div>
         <Link
@@ -283,6 +284,6 @@ export const CampaignDetailPage = () => {
         isOpen={isReceiptOpen}
         onClose={() => setIsReceiptOpen(false)}
       />
-    </div>
+    </ImpactBridgeLayout>
   );
 };

@@ -140,12 +140,47 @@ exports.updateProfile = async (req, res) => {
 // @desc Demo one-click switch for evaluations
 exports.demoSwitch = async (req, res) => {
   try {
-    const { role } = req.body; // 'ngo', 'donor', 'volunteer', 'admin'
+    const { role } = req.body; // 'admin', 'donor', 'volunteer', 'ngo'
     const targetRole = role || 'donor';
-    const user = await User.findOne({ role: targetRole });
+    let user = await User.findOne({ role: targetRole });
 
     if (!user) {
-      return res.status(404).json({ success: false, message: `No demo user found for role ${targetRole}. Please run seed first.` });
+      const demoUsers = {
+        admin: {
+          name: 'Dr. Sarah Chen (Platform Admin)',
+          email: 'admin@impactbridge.org',
+          password: 'password123',
+          role: 'admin',
+          avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80',
+        },
+        donor: {
+          name: 'Alex Morgan (Donor)',
+          email: 'alex.donor@example.com',
+          password: 'password123',
+          role: 'donor',
+          totalDonated: 45000,
+          avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80',
+        },
+        volunteer: {
+          name: 'Priya Patel (Volunteer)',
+          email: 'priya.volunteer@example.com',
+          password: 'password123',
+          role: 'volunteer',
+          skills: ['Teaching', 'First Aid', 'Community Outreach'],
+          hoursVolunteered: 24,
+          avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=300&q=80',
+        },
+        ngo: {
+          name: 'Sunita Rao (Green Earth Alliance)',
+          email: 'greenearth@ngo.org',
+          password: 'password123',
+          role: 'ngo',
+          avatar: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=300&q=80',
+        },
+      };
+
+      const def = demoUsers[targetRole] || demoUsers.donor;
+      user = await User.create(def);
     }
 
     const token = signToken(user._id);

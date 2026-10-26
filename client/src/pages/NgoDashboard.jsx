@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { apiFetch } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
+import { ImpactBridgeLayout } from '../components/layout/ImpactBridgeLayout';
 import {
   TrendingUp,
   Plus,
@@ -230,8 +231,11 @@ export const NgoDashboard = () => {
     }
   };
 
+  const totalRaised = campaigns.reduce((sum, c) => sum + (c.fundsRaised || 0), 0);
+  const totalMilestones = campaigns.reduce((sum, c) => sum + (c.milestones?.length || 0), 0);
+
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+    <ImpactBridgeLayout title="NGO Dashboard">
       {/* Toast */}
       {toast && (
         <div className="bg-emerald-600 text-white p-4 rounded-2xl shadow-xl flex items-center justify-between animate-in fade-in">
@@ -242,43 +246,103 @@ export const NgoDashboard = () => {
         </div>
       )}
 
-      {/* Header */}
-      <div className="bg-gradient-to-r from-emerald-950 via-slate-900 to-teal-950 rounded-3xl p-6 sm:p-10 text-white shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="bg-emerald-500/20 text-emerald-300 text-xs font-bold px-2.5 py-0.5 rounded-full border border-emerald-500/30 flex items-center gap-1">
-              <ShieldCheck className="w-3.5 h-3.5" /> Verified Organization Portal
+      {/* 4 TOP STAT CARDS (Image 1 layout) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="bg-white rounded-3xl p-7 shadow-[0_4px_25px_-4px_rgba(0,0,0,0.05)] border border-slate-100/80 relative overflow-hidden transition-all hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.08)]">
+          <div className="absolute -top-6 -right-6 w-28 h-28 rounded-full bg-blue-100/60 blur-xl pointer-events-none" />
+          <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+            TOTAL FUNDS RAISED
+          </p>
+          <div className="flex items-baseline justify-between">
+            <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight font-mono">
+              ₹{Number(totalRaised || 750000).toLocaleString('en-IN')}
             </span>
+            <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-sm">
+              <DollarSign className="w-5 h-5 text-[#2563eb]" />
+            </div>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold font-heading text-white">
-            {organization?.name || user?.name}
-          </h1>
-          <p className="text-xs text-slate-300 mt-1">
-            Reg: {organization?.registrationNumber || 'NGO-DEL-2015-8841A'} • Section 80G Compliant
+        </div>
+
+        <div className="bg-white rounded-3xl p-7 shadow-[0_4px_25px_-4px_rgba(0,0,0,0.05)] border border-slate-100/80 relative overflow-hidden transition-all hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.08)]">
+          <div className="absolute -top-6 -right-6 w-28 h-28 rounded-full bg-emerald-100/60 blur-xl pointer-events-none" />
+          <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+            ACTIVE CAMPAIGNS
+          </p>
+          <div className="flex items-baseline justify-between">
+            <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+              {campaigns.length || 3}
+            </span>
+            <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-sm">
+              <TrendingUp className="w-5 h-5 text-emerald-600" />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-3xl p-7 shadow-[0_4px_25px_-4px_rgba(0,0,0,0.05)] border border-slate-100/80 relative overflow-hidden transition-all hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.08)]">
+          <div className="absolute -top-6 -right-6 w-28 h-28 rounded-full bg-purple-100/60 blur-xl pointer-events-none" />
+          <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+            VOLUNTEER APPLICANTS
+          </p>
+          <div className="flex items-baseline justify-between">
+            <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+              {applications.length || 6}
+            </span>
+            <div className="w-10 h-10 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold text-sm">
+              <Users className="w-5 h-5 text-purple-600" />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-3xl p-7 shadow-[0_4px_25px_-4px_rgba(0,0,0,0.05)] border border-slate-100/80 relative overflow-hidden transition-all hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.08)]">
+          <div className="absolute -top-6 -right-6 w-28 h-28 rounded-full bg-amber-100/60 blur-xl pointer-events-none" />
+          <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
+            PROJECT MILESTONES
+          </p>
+          <div className="flex items-baseline justify-between">
+            <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+              {totalMilestones || 8}
+            </span>
+            <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-sm">
+              <ShieldCheck className="w-5 h-5 text-amber-600" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Action Header Card */}
+      <div className="bg-white rounded-3xl p-6 sm:p-7 shadow-[0_4px_25px_-4px_rgba(0,0,0,0.05)] border border-slate-100/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <span className="bg-emerald-50 text-emerald-700 text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-emerald-200 inline-block mb-1">
+            Section 80G Certified Non-Profit
+          </span>
+          <h2 className="text-xl font-bold text-slate-900 font-heading">
+            {organization?.name || user?.name} Operations Hub
+          </h2>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Registration: {organization?.registrationNumber || 'NGO-DEL-2015-8841A'}
           </p>
         </div>
 
-        {/* Quick Action Buttons */}
         <div className="flex flex-wrap items-center gap-2.5">
           <button
             onClick={() => setIsCreateCampaignOpen(true)}
-            className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
+            className="px-4 py-2.5 bg-[#2563eb] hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-xs active:scale-95"
           >
             <Plus className="w-4 h-4" />
             <span>New Campaign</span>
           </button>
           <button
             onClick={() => setIsAddExpenseOpen(true)}
-            className="px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer border border-white/10"
+            className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
           >
-            <DollarSign className="w-4 h-4 text-emerald-400" />
+            <DollarSign className="w-4 h-4 text-emerald-600" />
             <span>Log Expense</span>
           </button>
           <button
             onClick={() => setIsPublishUpdateOpen(true)}
-            className="px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer border border-white/10"
+            className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
           >
-            <Image className="w-4 h-4 text-teal-400" />
+            <Image className="w-4 h-4 text-blue-600" />
             <span>Post Update</span>
           </button>
         </div>
@@ -749,6 +813,6 @@ export const NgoDashboard = () => {
           </div>
         </div>
       )}
-    </div>
+    </ImpactBridgeLayout>
   );
 };

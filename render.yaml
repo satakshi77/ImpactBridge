@@ -27,6 +27,12 @@ services:
     rootDir: client
     buildCommand: npm install && npm run build
     staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: impactbridge-api
+          property: host
     routes:
       - type: rewrite
         source: /*
