@@ -255,7 +255,7 @@ export const NgoDashboard = () => {
           </p>
           <div className="flex items-baseline justify-between">
             <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight font-mono">
-              ₹{Number(totalRaised || 750000).toLocaleString('en-IN')}
+              ₹{Number(totalRaised).toLocaleString('en-IN')}
             </span>
             <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-sm">
               <DollarSign className="w-5 h-5 text-[#2563eb]" />
@@ -270,7 +270,7 @@ export const NgoDashboard = () => {
           </p>
           <div className="flex items-baseline justify-between">
             <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-              {campaigns.length || 3}
+              {campaigns.length}
             </span>
             <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-sm">
               <TrendingUp className="w-5 h-5 text-emerald-600" />
@@ -285,7 +285,7 @@ export const NgoDashboard = () => {
           </p>
           <div className="flex items-baseline justify-between">
             <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-              {applications.length || 6}
+              {applications.length}
             </span>
             <div className="w-10 h-10 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold text-sm">
               <Users className="w-5 h-5 text-purple-600" />
@@ -300,7 +300,7 @@ export const NgoDashboard = () => {
           </p>
           <div className="flex items-baseline justify-between">
             <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-              {totalMilestones || 8}
+              {totalMilestones}
             </span>
             <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-sm">
               <ShieldCheck className="w-5 h-5 text-amber-600" />

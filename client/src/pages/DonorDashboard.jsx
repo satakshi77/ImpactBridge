@@ -50,9 +50,11 @@ export const DonorDashboard = () => {
     fetchDonorData();
   }, []);
 
-  const totalDonated = user?.totalDonated || donations.reduce((sum, d) => sum + (d.amount || 0), 45000);
-  const totalMilestones = supportedProjects.reduce((sum, p) => sum + (p.completedMilestones || 0), 8);
-  const volunteerHours = user?.hoursVolunteered || 24;
+  const totalDonated = user?.totalDonated !== undefined && user?.totalDonated !== null
+    ? user.totalDonated
+    : donations.reduce((sum, d) => sum + (d.amount || 0), 0);
+  const totalMilestones = supportedProjects.reduce((sum, p) => sum + (p.completedMilestones || 0), 0);
+  const volunteerHours = user?.hoursVolunteered || 0;
 
   const getStatusBadge = (status) => {
     const s = (status || 'active').toLowerCase();
@@ -105,7 +107,7 @@ export const DonorDashboard = () => {
           </p>
           <div className="flex items-baseline justify-between">
             <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-              {supportedProjects.length || 3}
+              {supportedProjects.length}
             </span>
             <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-sm">
               <Compass className="w-5 h-5 text-emerald-600" />

@@ -20,6 +20,29 @@ if (apiBase) {
 }
 const API_BASE = apiBase;
 
+const DEMO_EMAILS = [
+  'admin@impactbridge.org',
+  'alex.donor@example.com',
+  'priya.volunteer@example.com',
+  'greenearth@ngo.org',
+];
+
+// Helper to determine if current session is an evaluation demo profile
+const isDemoSession = () => {
+  const token = localStorage.getItem('ib_token') || '';
+  const storedUserRaw = localStorage.getItem('ib_user');
+  if (storedUserRaw) {
+    try {
+      const u = JSON.parse(storedUserRaw);
+      if (u?.email && DEMO_EMAILS.includes(u.email.toLowerCase())) return true;
+      if (u?.isDemoUser) return true;
+    } catch {
+      // ignore
+    }
+  }
+  return token.includes('demo') && !token.includes('new');
+};
+
 // Fallback resolver when server is sleeping, offline, or rewrites to HTML
 const resolveMockFallback = (endpoint, options = {}) => {
   const cleanEndpoint = endpoint.replace(/^\/api/, '').split('?')[0];
@@ -34,30 +57,52 @@ const resolveMockFallback = (endpoint, options = {}) => {
   // Auth Endpoints
   if (cleanEndpoint === '/auth/login' && method === 'POST') {
     const email = (body.email || '').toLowerCase();
-    let user = Object.values(MOCK_USERS).find((u) => u.email.toLowerCase() === email);
-    if (!user) {
-      user = email.includes('admin')
-        ? MOCK_USERS.admin
-        : email.includes('ngo')
-        ? MOCK_USERS.ngo
-        : email.includes('priya') || email.includes('vol')
-        ? MOCK_USERS.volunteer
-        : MOCK_USERS.donor;
+    const isDemo = DEMO_EMAILS.includes(email);
+    let user;
+
+    if (isDemo) {
+      user = Object.values(MOCK_USERS).find((u) => u.email.toLowerCase() === email) || MOCK_USERS.donor;
+    } else {
+      // NEW USER LOGIN: Provide clean zero-data state
+      user = {
+        _id: `user_new_${Date.now()}`,
+        name: body.email.split('@')[0],
+        email: body.email,
+        role: email.includes('admin')
+          ? 'admin'
+          : email.includes('ngo')
+          ? 'ngo'
+          : email.includes('vol')
+          ? 'volunteer'
+          : 'donor',
+        totalDonated: 0,
+        hoursVolunteered: 0,
+        badges: [],
+        isDemoUser: false,
+      };
+      // Clear any prior cached user contributions
+      localStorage.removeItem('ib_custom_donations');
+      localStorage.removeItem('ib_custom_applications');
+      localStorage.removeItem('ib_custom_campaigns');
     }
-    const token = `ib_mock_token_${user.role}_${Date.now()}`;
+
+    const token = `ib_mock_token_${user.role}_${isDemo ? 'demo' : 'new'}_${Date.now()}`;
+    localStorage.setItem('ib_user', JSON.stringify(user));
+
     return {
       success: true,
       token,
       user,
-      organization: user.role === 'ngo' ? MOCK_ORGS[0] : null,
-      message: 'Demo login successful (Mock Sync)',
+      organization: user.role === 'ngo' && isDemo ? MOCK_ORGS[0] : user.role === 'ngo' ? { name: `${user.name}'s Foundation` } : null,
+      message: 'Login successful',
     };
   }
 
   if (cleanEndpoint === '/auth/demo-switch' && method === 'POST') {
     const role = body.role || 'donor';
-    const user = MOCK_USERS[role] || MOCK_USERS.donor;
-    const token = `ib_mock_token_${user.role}_${Date.now()}`;
+    const user = { ...MOCK_USERS[role], isDemoUser: true };
+    const token = `ib_mock_token_${user.role}_demo_${Date.now()}`;
+    localStorage.setItem('ib_user', JSON.stringify(user));
     return {
       success: true,
       token,
@@ -67,12 +112,34 @@ const resolveMockFallback = (endpoint, options = {}) => {
   }
 
   if (cleanEndpoint === '/auth/me') {
+    const storedUserRaw = localStorage.getItem('ib_user');
+    if (storedUserRaw) {
+      try {
+        const parsed = JSON.parse(storedUserRaw);
+        return {
+          success: true,
+          user: parsed,
+          organization: parsed.role === 'ngo' ? (parsed.isDemoUser ? MOCK_ORGS[0] : { name: `${parsed.name}'s Foundation` }) : null,
+        };
+      } catch {
+        // ignore
+      }
+    }
+
     const token = localStorage.getItem('ib_token') || '';
     let role = 'donor';
     if (token.includes('admin')) role = 'admin';
     else if (token.includes('ngo')) role = 'ngo';
     else if (token.includes('vol')) role = 'volunteer';
-    const user = MOCK_USERS[role] || MOCK_USERS.donor;
+    const user = isDemoSession() ? MOCK_USERS[role] : {
+      _id: `user_fresh_${Date.now()}`,
+      name: 'User',
+      email: 'user@example.com',
+      role,
+      totalDonated: 0,
+      hoursVolunteered: 0,
+      isDemoUser: false,
+    };
     return {
       success: true,
       user,
@@ -83,36 +150,69 @@ const resolveMockFallback = (endpoint, options = {}) => {
   if (cleanEndpoint === '/auth/register' && method === 'POST') {
     const role = body.role || 'donor';
     const user = {
-      _id: `user_${Date.now()}`,
-      name: body.name || 'Community Member',
+      _id: `user_new_${Date.now()}`,
+      name: body.name || 'New Supporter',
       email: body.email,
       role,
-      avatar: MOCK_USERS[role]?.avatar || MOCK_USERS.donor.avatar,
+      avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=300&q=80',
+      totalDonated: 0,
+      hoursVolunteered: 0,
+      badges: [],
+      isDemoUser: false,
     };
+    // Fresh slate
+    localStorage.removeItem('ib_custom_donations');
+    localStorage.removeItem('ib_custom_applications');
+    localStorage.removeItem('ib_custom_campaigns');
+    localStorage.setItem('ib_user', JSON.stringify(user));
+
     return {
       success: true,
-      token: `ib_mock_token_${role}_${Date.now()}`,
+      token: `ib_mock_token_${role}_new_${Date.now()}`,
       user,
-      organization: role === 'ngo' ? { name: body.organizationName } : null,
+      organization: role === 'ngo' ? { name: body.organizationName || `${user.name}'s Foundation` } : null,
     };
   }
 
   // Campaigns
   if (cleanEndpoint === '/campaigns') {
-    return { success: true, campaigns: MOCK_CAMPAIGNS };
+    const customCamps = JSON.parse(localStorage.getItem('ib_custom_campaigns') || '[]');
+    return { success: true, campaigns: [...customCamps, ...MOCK_CAMPAIGNS] };
   }
   if (cleanEndpoint === '/campaigns/my/ngo') {
+    if (!isDemoSession()) {
+      const customCamps = JSON.parse(localStorage.getItem('ib_custom_campaigns') || '[]');
+      return { success: true, campaigns: customCamps };
+    }
     return { success: true, campaigns: [MOCK_CAMPAIGNS[0]] };
   }
   if (cleanEndpoint === '/campaigns/saved') {
-    return { success: true, campaigns: [MOCK_CAMPAIGNS[1]] };
+    return { success: true, savedCampaigns: isDemoSession() ? [MOCK_CAMPAIGNS[1]] : [] };
+  }
+  if (cleanEndpoint === '/campaigns' && method === 'POST') {
+    const newCamp = {
+      _id: `camp_${Date.now()}`,
+      title: body.title || 'Community Empowerment Project',
+      fundingTarget: body.fundingTarget || 500000,
+      fundsRaised: 0,
+      status: 'active',
+      causeArea: body.causeArea || 'General Welfare',
+      coverImage: body.coverImage || 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1200&q=80',
+      milestones: [],
+      expenses: [],
+    };
+    const customCamps = JSON.parse(localStorage.getItem('ib_custom_campaigns') || '[]');
+    customCamps.unshift(newCamp);
+    localStorage.setItem('ib_custom_campaigns', JSON.stringify(customCamps));
+    return { success: true, campaign: newCamp };
   }
   if (cleanEndpoint.startsWith('/campaigns/') && cleanEndpoint.endsWith('/save')) {
     return { success: true, message: 'Campaign saved' };
   }
   if (cleanEndpoint.startsWith('/campaigns/')) {
     const id = cleanEndpoint.replace('/campaigns/', '');
-    const found = MOCK_CAMPAIGNS.find((c) => c._id === id || c.slug === id) || MOCK_CAMPAIGNS[0];
+    const customCamps = JSON.parse(localStorage.getItem('ib_custom_campaigns') || '[]');
+    const found = [...customCamps, ...MOCK_CAMPAIGNS].find((c) => c._id === id || c.slug === id) || MOCK_CAMPAIGNS[0];
     return { success: true, campaign: found };
   }
 
@@ -120,10 +220,41 @@ const resolveMockFallback = (endpoint, options = {}) => {
   if (cleanEndpoint === '/volunteers') {
     return { success: true, opportunities: MOCK_VOLUNTEER_OPPS };
   }
-  if (cleanEndpoint === '/volunteers/my-applications' || cleanEndpoint === '/volunteers/ngo-applications') {
+  if (cleanEndpoint === '/volunteers/my-applications') {
+    if (!isDemoSession()) {
+      const customApps = JSON.parse(localStorage.getItem('ib_custom_applications') || '[]');
+      return {
+        success: true,
+        applications: customApps,
+        stats: {
+          totalApplications: customApps.length,
+          confirmedActivities: customApps.filter((a) => a.status === 'completed' || a.status === 'attended').length,
+          confirmedHours: customApps.reduce((sum, a) => sum + (a.hoursLogged || 0), 0),
+        },
+      };
+    }
+    return {
+      success: true,
+      applications: MOCK_VOLUNTEER_APPS,
+      stats: { totalApplications: 2, confirmedActivities: 1, confirmedHours: 24 },
+    };
+  }
+  if (cleanEndpoint === '/volunteers/ngo-applications') {
+    if (!isDemoSession()) return { success: true, applications: [] };
     return { success: true, applications: MOCK_VOLUNTEER_APPS };
   }
   if (cleanEndpoint === '/volunteers/apply') {
+    const customApps = JSON.parse(localStorage.getItem('ib_custom_applications') || '[]');
+    customApps.unshift({
+      _id: `app_${Date.now()}`,
+      opportunity: MOCK_VOLUNTEER_OPPS[0],
+      status: 'pending',
+      hoursLogged: 0,
+      attendanceConfirmed: false,
+      certificateIssued: false,
+      createdAt: new Date().toISOString(),
+    });
+    localStorage.setItem('ib_custom_applications', JSON.stringify(customApps));
     return { success: true, message: 'Application submitted successfully' };
   }
   if (cleanEndpoint.includes('/review') || cleanEndpoint.includes('/confirm-attendance')) {
@@ -132,28 +263,92 @@ const resolveMockFallback = (endpoint, options = {}) => {
 
   // Donations
   if (cleanEndpoint === '/donations/supported-projects') {
-    return { success: true, projects: [MOCK_CAMPAIGNS[0], MOCK_CAMPAIGNS[1]] };
-  }
-  if (cleanEndpoint === '/donations/my') {
-    return { success: true, donations: MOCK_DONATIONS };
-  }
-  if (cleanEndpoint === '/donations' && method === 'POST') {
+    if (!isDemoSession()) {
+      const customDons = JSON.parse(localStorage.getItem('ib_custom_donations') || '[]');
+      const projects = customDons.map((d) => ({
+        campaign: d.campaign,
+        myTotalContribution: d.amount,
+        donationCount: 1,
+        completedMilestones: 0,
+        milestonesProgressPercent: 0,
+      }));
+      return { success: true, supportedProjects: projects };
+    }
     return {
       success: true,
-      donation: {
-        _id: `don_${Date.now()}`,
-        amount: body.amount || 5000,
-        receiptNumber: `REC-80G-${Date.now().toString().slice(-6)}`,
-        campaign: MOCK_CAMPAIGNS[0],
+      supportedProjects: [
+        {
+          campaign: MOCK_CAMPAIGNS[0],
+          organization: MOCK_ORGS[0],
+          myTotalContribution: 25000,
+          donationCount: 1,
+          completedMilestones: 1,
+          milestonesProgressPercent: 50,
+        },
+        {
+          campaign: MOCK_CAMPAIGNS[1],
+          organization: MOCK_ORGS[1],
+          myTotalContribution: 20000,
+          donationCount: 1,
+          completedMilestones: 1,
+          milestonesProgressPercent: 60,
+        },
+      ],
+    };
+  }
+  if (cleanEndpoint === '/donations/my') {
+    if (!isDemoSession()) {
+      const customDons = JSON.parse(localStorage.getItem('ib_custom_donations') || '[]');
+      return { success: true, count: customDons.length, donations: customDons };
+    }
+    return { success: true, count: MOCK_DONATIONS.length, donations: MOCK_DONATIONS };
+  }
+  if (cleanEndpoint === '/donations' && method === 'POST') {
+    const newDonation = {
+      _id: `don_${Date.now()}`,
+      amount: Number(body.amount) || 5000,
+      receiptNumber: `REC-80G-${Date.now().toString().slice(-6)}`,
+      paymentStatus: 'completed',
+      campaign: MOCK_CAMPAIGNS[0],
+      createdAt: new Date().toISOString(),
+    };
+    const customDons = JSON.parse(localStorage.getItem('ib_custom_donations') || '[]');
+    customDons.unshift(newDonation);
+    localStorage.setItem('ib_custom_donations', JSON.stringify(customDons));
+
+    // Update stored user totalDonated
+    const storedUserRaw = localStorage.getItem('ib_user');
+    if (storedUserRaw) {
+      try {
+        const u = JSON.parse(storedUserRaw);
+        u.totalDonated = (u.totalDonated || 0) + newDonation.amount;
+        localStorage.setItem('ib_user', JSON.stringify(u));
+      } catch {
+        // ignore
+      }
+    }
+
+    return {
+      success: true,
+      donation: newDonation,
+      receipt: {
+        receiptNumber: newDonation.receiptNumber,
+        transactionId: `TXN-IB-${Date.now()}`,
+        amount: newDonation.amount,
+        donorName: body.donorName || 'Supporter',
+        campaignTitle: MOCK_CAMPAIGNS[0].title,
+        date: newDonation.createdAt,
       },
     };
   }
 
   // Expenses & Milestones
   if (cleanEndpoint === '/expenses') {
+    if (!isDemoSession()) return { success: true, expenses: [] };
     return { success: true, expenses: MOCK_CAMPAIGNS[0].expenses };
   }
   if (cleanEndpoint === '/milestones') {
+    if (!isDemoSession()) return { success: true, milestones: [] };
     return { success: true, milestones: MOCK_CAMPAIGNS[0].milestones };
   }
   if (cleanEndpoint === '/updates') {

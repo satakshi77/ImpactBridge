@@ -70,9 +70,9 @@ export const VolunteerDashboard = () => {
     }
   };
 
-  const confirmedHours = stats.confirmedHours || user?.hoursVolunteered || 24;
-  const completedActivities = stats.confirmedActivities || 3;
-  const totalApps = applications.length || 5;
+  const confirmedHours = stats?.confirmedHours ?? (user?.hoursVolunteered ?? 0);
+  const completedActivities = stats?.confirmedActivities ?? applications.filter((a) => a.status === 'completed' || a.status === 'attended').length;
+  const totalApps = stats?.totalApplications ?? applications.length;
 
   return (
     <ImpactBridgeLayout title="Volunteer Hub">
