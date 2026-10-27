@@ -21,6 +21,7 @@ import { RegisterPage } from './pages/RegisterPage';
 import { UnauthorizedPage } from './pages/UnauthorizedPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { ImpactUpdatesPage } from './pages/ImpactUpdatesPage';
+import { NotificationsPage } from './pages/NotificationsPage';
 
 // Root Entry: Site opens directly to Login if not authenticated
 const RootRedirect = () => {
@@ -124,7 +125,7 @@ const AppLayout = () => {
             path="/notifications"
             element={
               <ProtectedRoute>
-                <ImpactUpdatesPage />
+                <NotificationsPage />
               </ProtectedRoute>
             }
           />
