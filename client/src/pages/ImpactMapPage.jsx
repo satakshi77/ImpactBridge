@@ -155,7 +155,7 @@ export const ImpactMapPage = () => {
             MONITORED FIELD SITES
           </p>
           <div className="flex items-baseline justify-between">
-            <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight font-mono">
+            <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight font-heading">
               {filteredPoints.length}
             </span>
             <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-sm">
@@ -173,7 +173,7 @@ export const ImpactMapPage = () => {
             DIRECT BENEFICIARIES
           </p>
           <div className="flex items-baseline justify-between">
-            <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight font-mono">
+            <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight font-heading">
               48,200+
             </span>
             <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-sm">
@@ -191,7 +191,7 @@ export const ImpactMapPage = () => {
             COMMUNITY HARDWARE
           </p>
           <div className="flex items-baseline justify-between">
-            <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight font-mono">
+            <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight font-heading">
               27 Units
             </span>
             <div className="w-10 h-10 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold text-sm">
@@ -209,7 +209,7 @@ export const ImpactMapPage = () => {
             ACTIVE MOBILIZATION
           </p>
           <div className="flex items-baseline justify-between">
-            <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight font-mono">
+            <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight font-heading">
               ₹18.05L
             </span>
             <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-sm">
@@ -457,7 +457,7 @@ export const ImpactMapPage = () => {
                 <div className="space-y-2 pt-1 border-t border-slate-100">
                   <div className="flex items-center justify-between text-xs font-bold">
                     <span className="text-slate-500">Funded Progress</span>
-                    <span className="text-slate-900 font-mono">
+                    <span className="text-slate-900 font-heading">
                       ₹{Number(selectedPoint.raised).toLocaleString('en-IN')} / ₹{Number(selectedPoint.target).toLocaleString('en-IN')}
                     </span>
                   </div>
@@ -479,7 +479,7 @@ export const ImpactMapPage = () => {
                 <div className="space-y-2 pt-1 border-t border-slate-100">
                   <div className="flex items-center justify-between text-xs font-bold">
                     <span className="text-slate-500">Positions Available</span>
-                    <span className="text-purple-600 font-mono">
+                    <span className="text-purple-600 font-heading">
                       {selectedPoint.slotsLeft || 5} Open Slots
                     </span>
                   </div>

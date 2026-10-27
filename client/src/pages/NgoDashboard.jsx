@@ -254,7 +254,7 @@ export const NgoDashboard = () => {
             TOTAL FUNDS RAISED
           </p>
           <div className="flex items-baseline justify-between">
-            <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight font-mono">
+            <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight font-heading">
               ₹{Number(totalRaised).toLocaleString('en-IN')}
             </span>
             <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-sm">
@@ -388,7 +388,7 @@ export const NgoDashboard = () => {
                       {camp.causeArea}
                     </span>
                     <h3 className="text-base font-bold text-slate-900 mt-1 line-clamp-1 font-heading">{camp.title}</h3>
-                    <p className="text-xs text-slate-500 mt-0.5 font-mono">
+                    <p className="text-xs text-slate-500 mt-0.5 font-medium font-heading">
                       ₹{Number(camp.fundsRaised).toLocaleString('en-IN')} raised of ₹{Number(camp.fundingTarget).toLocaleString('en-IN')}
                     </p>
                   </div>

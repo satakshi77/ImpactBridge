@@ -181,7 +181,7 @@ export const VolunteerDashboard = () => {
                     <td className="py-4 px-6 text-center">
                       {getStatusBadge(app.status)}
                     </td>
-                    <td className="py-4 px-6 font-mono font-bold text-slate-800 text-xs">
+                    <td className="py-4 px-6 font-bold text-slate-800 text-xs font-heading">
                       {app.opportunity?.estimatedHours || 8} hrs
                     </td>
                     <td className="py-4 px-6 text-xs text-slate-500">

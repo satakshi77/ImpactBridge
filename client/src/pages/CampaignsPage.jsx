@@ -148,7 +148,7 @@ export const CampaignsPage = () => {
                 {/* Progress bar */}
                 <div className="space-y-1.5 pt-2 border-t border-slate-100">
                   <div className="flex justify-between text-xs font-bold">
-                    <span className="text-slate-900 font-mono">
+                    <span className="text-slate-900 font-heading font-bold">
                       ₹{Number(camp.fundsRaised).toLocaleString('en-IN')}
                     </span>
                     <span className="text-[#2563eb]">{camp.percentFunded}%</span>

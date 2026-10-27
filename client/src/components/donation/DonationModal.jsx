@@ -187,7 +187,7 @@ export const DonationModal = ({ campaign, isOpen, onClose, onSuccess }) => {
               placeholder="Enter PAN Number (e.g. ABCDE1234F)"
               value={panNumber}
               onChange={(e) => setPanNumber(e.target.value.toUpperCase())}
-              className="w-full px-3 py-1.5 text-xs border border-slate-200 rounded-lg bg-white uppercase font-mono tracking-wider focus:outline-none focus:ring-1 focus:ring-emerald-500"
+              className="w-full px-3 py-1.5 text-xs border border-slate-200 rounded-lg bg-white uppercase font-semibold tracking-wider focus:outline-none focus:ring-1 focus:ring-emerald-500"
             />
             <p className="text-[10px] text-slate-400">
               Your donation receipt will include registration details for Indian Income Tax deductions.

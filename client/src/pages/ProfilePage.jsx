@@ -115,7 +115,7 @@ export const ProfilePage = () => {
                 <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
                   Member / Registration ID
                 </span>
-                <span className="text-sm font-bold text-slate-800 font-mono">
+                <span className="text-sm font-bold text-slate-800 font-heading">
                   {profileData.memberId}
                 </span>
               </div>
@@ -187,7 +187,7 @@ export const ProfilePage = () => {
                     className="w-full bg-white px-3 py-1.5 rounded-lg border border-slate-200 text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 ) : (
-                  <span className="text-sm font-bold text-slate-800 font-mono">
+                  <span className="text-sm font-bold text-slate-800 font-heading">
                     {profileData.panNumber}
                   </span>
                 )}

@@ -90,7 +90,7 @@ export const DonorDashboard = () => {
             TOTAL DONATED
           </p>
           <div className="flex items-baseline justify-between">
-            <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight font-mono">
+            <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight font-heading">
               ₹{Number(totalDonated).toLocaleString('en-IN')}
             </span>
             <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-sm">
@@ -106,7 +106,7 @@ export const DonorDashboard = () => {
             SUPPORTED CAUSES
           </p>
           <div className="flex items-baseline justify-between">
-            <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+            <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight font-heading">
               {supportedProjects.length}
             </span>
             <div className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-sm">
@@ -122,7 +122,7 @@ export const DonorDashboard = () => {
             MILESTONES REACHED
           </p>
           <div className="flex items-baseline justify-between">
-            <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
+            <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight font-heading">
               {totalMilestones}
             </span>
             <div className="w-10 h-10 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold text-sm">
@@ -138,8 +138,8 @@ export const DonorDashboard = () => {
             VOLUNTEER HOURS
           </p>
           <div className="flex items-baseline justify-between">
-            <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-              {volunteerHours} hrs
+            <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight font-heading">
+              {volunteerHours} <span className="text-xl font-bold text-slate-500">hrs</span>
             </span>
             <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center font-bold text-sm">
               <Clock className="w-5 h-5 text-amber-600" />
@@ -243,7 +243,7 @@ export const DonorDashboard = () => {
                       <td className="py-4 px-6 text-center">
                         {getStatusBadge(item.campaign?.status || 'In Progress')}
                       </td>
-                      <td className="py-4 px-6 font-mono font-bold text-slate-800 text-xs">
+                      <td className="py-4 px-6 font-bold text-slate-800 text-xs font-heading">
                         ₹{Number(item.myTotalContribution).toLocaleString('en-IN')}
                       </td>
                       <td className="py-4 px-6 text-xs">
@@ -254,7 +254,7 @@ export const DonorDashboard = () => {
                               style={{ width: `${item.milestonesProgressPercent || 60}%` }}
                             />
                           </div>
-                          <span className="font-bold text-blue-600 font-mono text-[11px]">
+                          <span className="font-bold text-blue-600 text-[11px] font-heading">
                             {item.milestonesProgressPercent || 60}%
                           </span>
                         </div>
@@ -292,13 +292,13 @@ export const DonorDashboard = () => {
               <tbody className="divide-y divide-slate-100 text-sm">
                 {donations.map((d) => (
                   <tr key={d._id} className="hover:bg-slate-50/80 transition-colors">
-                    <td className="py-4 px-6 font-mono font-bold text-slate-800 text-xs">
+                    <td className="py-4 px-6 font-semibold text-slate-800 text-xs font-heading">
                       {d.receiptNumber}
                     </td>
                     <td className="py-4 px-6 font-semibold text-slate-900 text-xs line-clamp-1">
                       {d.campaign?.title}
                     </td>
-                    <td className="py-4 px-6 font-mono font-bold text-slate-800 text-xs">
+                    <td className="py-4 px-6 font-bold text-slate-800 text-xs font-heading">
                       ₹{Number(d.amount).toLocaleString('en-IN')}
                     </td>
                     <td className="py-4 px-6 text-center">

@@ -203,7 +203,7 @@ export const CampaignDetailPage = () => {
                 Total Funds Raised
               </span>
               <div className="flex items-baseline gap-2 mt-1">
-                <span className="text-3xl sm:text-4xl font-extrabold text-slate-900 font-mono">
+                <span className="text-3xl sm:text-4xl font-extrabold text-slate-900 font-heading">
                   ₹{Number(campaign.fundsRaised).toLocaleString('en-IN')}
                 </span>
                 <span className="text-xs text-slate-400 font-normal">

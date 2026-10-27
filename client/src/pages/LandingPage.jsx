@@ -305,7 +305,7 @@ export const LandingPage = () => {
 
                 <div className="pt-4 border-t border-slate-100 space-y-2">
                   <div className="flex justify-between text-xs font-semibold">
-                    <span className="text-slate-800 font-mono font-bold">
+                    <span className="text-slate-800 font-heading font-bold">
                       ₹{camp.fundsRaised?.toLocaleString('en-IN')}{' '}
                       <span className="text-slate-400 font-normal">of ₹{camp.fundingTarget?.toLocaleString('en-IN')}</span>
                     </span>
