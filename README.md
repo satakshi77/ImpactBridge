@@ -200,6 +200,7 @@ Open `http://localhost:3000` in your web browser.
 
 ## 🌐 Live Demo
 
-**Try ImpactBridge here:** [Launch Live Website](https://impact-bridge-t7ah.vercel.app/)
+**Try ImpactBridge here:** [Launch Live Website](https://impact-bridge-mu.vercel.app/)
 
 Explore the platform's NGO fundraising, volunteer matching, and project impact tracking features through the live application.
+
