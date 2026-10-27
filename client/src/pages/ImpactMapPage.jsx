@@ -89,7 +89,35 @@ export const ImpactMapPage = () => {
   const [selectedPoint, setSelectedPoint] = useState(null);
   const [mapCenter, setMapCenter] = useState([22.5, 78.5]);
   const [mapZoom, setMapZoom] = useState(5);
-  const [mapTheme, setMapTheme] = useState('carto'); // 'carto' | 'osm'
+  const [mapTheme, setMapTheme] = useState('osm'); // 'osm' | 'esri' | 'hot' | 'satellite'
+
+  // 100% Free Public Map Tile Providers (Zero API Key Required)
+  const mapThemes = {
+    osm: {
+      name: 'OpenStreetMap',
+      url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 19,
+    },
+    esri: {
+      name: 'ESRI Streets',
+      url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}',
+      attribution: 'Tiles &copy; Esri &mdash; DeLorme, NAVTEQ, USGS',
+      maxZoom: 19,
+    },
+    hot: {
+      name: 'Humanitarian',
+      url: 'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
+      attribution: '&copy; OpenStreetMap contributors, Humanitarian OpenStreetMap Team',
+      maxZoom: 19,
+    },
+    satellite: {
+      name: 'Satellite',
+      url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+      attribution: 'Tiles &copy; Esri, Maxar, Earthstar Geographics',
+      maxZoom: 18,
+    },
+  };
 
   const causeList = [
     'All',
@@ -249,30 +277,23 @@ export const ImpactMapPage = () => {
             ))}
           </div>
 
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mr-1">
-              Map Style:
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider mr-1 shrink-0">
+              Style:
             </span>
-            <button
-              onClick={() => setMapTheme('carto')}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
-                mapTheme === 'carto'
-                  ? 'bg-slate-900 text-white shadow-xs'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-              }`}
-            >
-              Light Modern
-            </button>
-            <button
-              onClick={() => setMapTheme('osm')}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
-                mapTheme === 'osm'
-                  ? 'bg-slate-900 text-white shadow-xs'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-              }`}
-            >
-              OSM Standard
-            </button>
+            {Object.entries(mapThemes).map(([key, t]) => (
+              <button
+                key={key}
+                onClick={() => setMapTheme(key)}
+                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer shrink-0 ${
+                  mapTheme === key
+                    ? 'bg-[#2563eb] text-white shadow-xs'
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                }`}
+              >
+                {t.name}
+              </button>
+            ))}
           </div>
         </div>
 
@@ -330,12 +351,10 @@ export const ImpactMapPage = () => {
               <MapController center={mapCenter} zoom={mapZoom} />
 
               <TileLayer
-                attribution='&copy; <a href="https://carto.com/">CARTO</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                url={
-                  mapTheme === 'carto'
-                    ? 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png'
-                    : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-                }
+                key={mapTheme}
+                url={(mapThemes[mapTheme] || mapThemes.osm).url}
+                attribution={(mapThemes[mapTheme] || mapThemes.osm).attribution}
+                maxZoom={(mapThemes[mapTheme] || mapThemes.osm).maxZoom || 19}
               />
 
               {filteredPoints.map((point) => {
