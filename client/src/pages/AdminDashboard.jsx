@@ -84,7 +84,7 @@ export const AdminDashboard = () => {
             TOTAL FUNDS DISBURSED
           </p>
           <div className="flex items-baseline justify-between">
-            <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight font-mono">
+            <span className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight font-heading">
               ₹{Number(stats?.totalDonations || 12450000).toLocaleString('en-IN')}
             </span>
             <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-sm">
@@ -185,7 +185,7 @@ export const AdminDashboard = () => {
                         </div>
                       </div>
                     </td>
-                    <td className="py-4 px-6 font-mono font-bold text-slate-700 text-xs">
+                    <td className="py-4 px-6 font-semibold text-slate-700 text-xs font-heading">
                       {org.registrationNumber}
                     </td>
                     <td className="py-4 px-6 text-center">

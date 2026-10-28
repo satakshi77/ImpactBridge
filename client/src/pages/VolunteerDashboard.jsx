@@ -70,9 +70,9 @@ export const VolunteerDashboard = () => {
     }
   };
 
-  const confirmedHours = stats.confirmedHours || user?.hoursVolunteered || 24;
-  const completedActivities = stats.confirmedActivities || 3;
-  const totalApps = applications.length || 5;
+  const confirmedHours = stats?.confirmedHours ?? (user?.hoursVolunteered ?? 0);
+  const completedActivities = stats?.confirmedActivities ?? applications.filter((a) => a.status === 'completed' || a.status === 'attended').length;
+  const totalApps = stats?.totalApplications ?? applications.length;
 
   return (
     <ImpactBridgeLayout title="Volunteer Hub">
@@ -181,7 +181,7 @@ export const VolunteerDashboard = () => {
                     <td className="py-4 px-6 text-center">
                       {getStatusBadge(app.status)}
                     </td>
-                    <td className="py-4 px-6 font-mono font-bold text-slate-800 text-xs">
+                    <td className="py-4 px-6 font-bold text-slate-800 text-xs font-heading">
                       {app.opportunity?.estimatedHours || 8} hrs
                     </td>
                     <td className="py-4 px-6 text-xs text-slate-500">

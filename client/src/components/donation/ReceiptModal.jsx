@@ -49,7 +49,7 @@ export const ReceiptModal = ({ receipt, isOpen, onClose }) => {
               <span className="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full uppercase tracking-wider">
                 80G Tax Exemption
               </span>
-              <p className="text-xs font-mono font-semibold text-slate-700 mt-2">
+              <p className="text-xs font-semibold text-slate-700 mt-2 font-heading">
                 Receipt #{receipt.receiptNumber || 'RCP-2026-00918'}
               </p>
               <p className="text-[11px] text-slate-500">
@@ -63,13 +63,13 @@ export const ReceiptModal = ({ receipt, isOpen, onClose }) => {
             <div>
               <span className="text-slate-400 uppercase font-semibold text-[10px] block">Donor Details</span>
               <p className="font-bold text-slate-900 text-sm mt-0.5">{receipt.donorName || 'Supporter'}</p>
-              <p className="text-slate-500">PAN: <span className="font-mono font-semibold text-slate-700">{receipt.panNumber || 'NOT PROVIDED'}</span></p>
+              <p className="text-slate-500">PAN: <span className="font-semibold text-slate-700 font-heading">{receipt.panNumber || 'NOT PROVIDED'}</span></p>
               <p className="text-slate-500">Status: <span className="text-emerald-600 font-semibold">Payment Completed</span></p>
             </div>
             <div>
               <span className="text-slate-400 uppercase font-semibold text-[10px] block">Beneficiary Organization</span>
               <p className="font-bold text-slate-900 text-sm mt-0.5">{receipt.organizationName || 'Impact Partner'}</p>
-              <p className="text-slate-500">Txn Ref: <span className="font-mono text-slate-600 text-[11px]">{receipt.transactionId || 'TXN-IB-992144'}</span></p>
+              <p className="text-slate-500">Txn Ref: <span className="text-slate-600 text-[11px] font-heading font-semibold">{receipt.transactionId || 'TXN-IB-992144'}</span></p>
             </div>
           </div>
 
@@ -94,13 +94,13 @@ export const ReceiptModal = ({ receipt, isOpen, onClose }) => {
                       <ShieldCheck className="w-3 h-3 text-emerald-600" /> 50% Deductible
                     </span>
                   </td>
-                  <td className="py-3 px-4 text-right font-bold text-slate-900 text-sm font-mono">
+                  <td className="py-3 px-4 text-right font-bold text-slate-900 text-sm font-heading">
                     ₹{Number(receipt.amount || 0).toLocaleString('en-IN')}
                   </td>
                 </tr>
                 <tr className="bg-slate-50 font-bold">
                   <td colSpan="2" className="py-2.5 px-4 text-right uppercase text-[10px] text-slate-600">Total Contribution Received</td>
-                  <td className="py-2.5 px-4 text-right text-emerald-700 text-base font-mono">
+                  <td className="py-2.5 px-4 text-right text-emerald-700 text-base font-heading font-black">
                     ₹{Number(receipt.amount || 0).toLocaleString('en-IN')}
                   </td>
                 </tr>

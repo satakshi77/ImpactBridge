@@ -85,7 +85,7 @@ export const NgoDetailPage = () => {
               </div>
               <p className="text-xs sm:text-sm text-emerald-700 font-medium">{org.tagline}</p>
               <p className="text-xs text-slate-500">
-                Reg No: <span className="font-mono font-semibold text-slate-700">{org.registrationNumber}</span> • Section 80G Tax-Exempt
+                Reg No: <span className="font-heading font-semibold text-slate-700">{org.registrationNumber}</span> • Section 80G Tax-Exempt
               </p>
             </div>
           </div>

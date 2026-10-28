@@ -73,6 +73,8 @@ exports.getImpactMapData = async (req, res) => {
         cause: c.causeArea,
         lat: c.location?.lat || 28.6139,
         lng: c.location?.lng || 77.2090,
+        latitude: c.location?.lat || 28.6139,
+        longitude: c.location?.lng || 77.2090,
         city: c.location?.city || 'Delhi',
         image: c.coverImage,
         summary: c.shortDescription,
@@ -80,6 +82,7 @@ exports.getImpactMapData = async (req, res) => {
         target: c.fundingTarget,
         percentFunded: c.percentFunded,
         orgName: c.organization?.name,
+        link: `/campaigns/${c._id}`,
       })),
       ...opportunities.map((o) => ({
         id: o._id,
@@ -88,10 +91,13 @@ exports.getImpactMapData = async (req, res) => {
         cause: o.causeArea,
         lat: o.location?.lat || 28.6139,
         lng: o.location?.lng || 77.2090,
+        latitude: o.location?.lat || 28.6139,
+        longitude: o.location?.lng || 77.2090,
         city: o.location?.city || 'Delhi',
         locationType: o.locationType,
         slotsLeft: o.availableSlots - o.filledSlots,
         orgName: o.organization?.name,
+        link: `/volunteers`,
       })),
     ];
 

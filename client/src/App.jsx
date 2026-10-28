@@ -21,6 +21,7 @@ import { RegisterPage } from './pages/RegisterPage';
 import { UnauthorizedPage } from './pages/UnauthorizedPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { ImpactUpdatesPage } from './pages/ImpactUpdatesPage';
+import { NotificationsPage } from './pages/NotificationsPage';
 
 // Root Entry: Site opens directly to Login if not authenticated
 const RootRedirect = () => {
@@ -48,16 +49,16 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 const AppLayout = () => {
   const location = useLocation();
 
-  // Show legacy marketing navbar/footer only if explicitly on /landing
-  const isLandingOnly = location.pathname === '/landing';
+  // Show marketing navbar/footer on landing and root home pages
+  const isLandingPage = location.pathname === '/' || location.pathname === '/landing';
 
   return (
     <div className="min-h-screen flex flex-col bg-[#f3f6fa] text-slate-800 selection:bg-blue-500 selection:text-white">
-      {isLandingOnly && <Navbar />}
+      {isLandingPage && <Navbar />}
       <main className="flex-1">
         <Routes>
-          {/* Site opens directly to Login or Role Dashboard */}
-          <Route path="/" element={<RootRedirect />} />
+          {/* Site opens directly to Landing Page */}
+          <Route path="/" element={<LandingPage />} />
 
           {/* Authentication Pages (No Navbar) */}
           <Route path="/login" element={<LoginPage />} />
@@ -124,7 +125,7 @@ const AppLayout = () => {
             path="/notifications"
             element={
               <ProtectedRoute>
-                <ImpactUpdatesPage />
+                <NotificationsPage />
               </ProtectedRoute>
             }
           />
@@ -142,7 +143,7 @@ const AppLayout = () => {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
-      {isLandingOnly && <Footer />}
+      {isLandingPage && <Footer />}
     </div>
   );
 };

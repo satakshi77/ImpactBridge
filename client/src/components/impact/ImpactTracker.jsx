@@ -369,7 +369,7 @@ export const ImpactTracker = ({ impactData, donorContribution }) => {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="bg-emerald-50/60 p-4 rounded-2xl border border-emerald-200">
                 <span className="text-[11px] font-bold text-emerald-800 uppercase block">Total Funds Raised</span>
-                <span className="text-2xl font-extrabold text-emerald-900 font-mono mt-1 block">
+                <span className="text-2xl font-extrabold text-emerald-900 font-heading mt-1 block">
                   ₹{Number(fundsRaised).toLocaleString('en-IN')}
                 </span>
                 <span className="text-[11px] text-emerald-700 mt-1 block">
@@ -379,7 +379,7 @@ export const ImpactTracker = ({ impactData, donorContribution }) => {
 
               <div className="bg-blue-50/60 p-4 rounded-2xl border border-blue-200">
                 <span className="text-[11px] font-bold text-blue-800 uppercase block">Reported Expenditures</span>
-                <span className="text-2xl font-extrabold text-blue-900 font-mono mt-1 block">
+                <span className="text-2xl font-extrabold text-blue-900 font-heading mt-1 block">
                   ₹{Number(totalReportedSpent).toLocaleString('en-IN')}
                 </span>
                 <span className="text-[11px] text-blue-700 mt-1 block">Backed by invoices & vendor bills</span>
@@ -387,7 +387,7 @@ export const ImpactTracker = ({ impactData, donorContribution }) => {
 
               <div className="bg-amber-50/60 p-4 rounded-2xl border border-amber-200">
                 <span className="text-[11px] font-bold text-amber-800 uppercase block">Remaining Unspent Funds</span>
-                <span className="text-2xl font-extrabold text-amber-900 font-mono mt-1 block">
+                <span className="text-2xl font-extrabold text-amber-900 font-heading mt-1 block">
                   ₹{Number(unspentFunds).toLocaleString('en-IN')}
                 </span>
                 <span className="text-[11px] text-amber-700 mt-1 block">Reserved for upcoming milestones</span>
@@ -455,7 +455,7 @@ export const ImpactTracker = ({ impactData, donorContribution }) => {
                               <span className="bg-slate-100 px-2 py-0.5 rounded text-[11px]">{e.category}</span>
                             </td>
                             <td className="py-3 px-4 text-slate-600">{e.vendor || 'Authorized Vendor'}</td>
-                            <td className="py-3 px-4 font-mono font-bold text-slate-900">
+                            <td className="py-3 px-4 font-bold text-slate-900 font-heading">
                               ₹{Number(e.amount).toLocaleString('en-IN')}
                             </td>
                             <td className="py-3 px-4">
@@ -570,7 +570,7 @@ export const ImpactTracker = ({ impactData, donorContribution }) => {
                             <div className="grid grid-cols-2 gap-2">
                               {up.outcomeIndicators.map((ind, idx) => (
                                 <div key={idx} className="bg-white p-2 rounded-lg border border-emerald-200/60">
-                                  <span className="text-base font-bold text-emerald-700 font-mono block">
+                                  <span className="text-base font-bold text-emerald-700 font-heading block">
                                     {ind.value.toLocaleString()} {ind.unit}
                                   </span>
                                   <span className="text-[10px] text-slate-500 block leading-tight">{ind.label}</span>
